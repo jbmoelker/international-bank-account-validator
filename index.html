@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf8">
+		<title>International Bank Account Validator</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+		<link rel="stylesheet" href="index.css" />
+	</head>
+	<body>
+
+		<form method="get" action="" class="bank-account-form">
+
+			<header>
+				<h1>International Bank Account Validator</h1>
+				<p>This international bank account validator form automatically sets the validation pattern (regex) and help text for the <a href="http://en.wikipedia.org/wiki/International_Bank_Account_Number" target="_blank" title="IBAN description on Wikipedia"><abbr title="International Bank Account Number">IBAN</abbr></a> and <a href="http://en.wikipedia.org/wiki/ISO_9362" target="_blank" title="BIC description on wikipedia"><abbr title="Business Identifier Code">BIC</abbr></a> input fields based on the selected country.<br />These widgets leverage the client-side validation support of modern browsers. Javascript is used to dynamicly update the <a href="http://www.w3.org/TR/2011/WD-html5-20110525/common-input-element-attributes.html#the-pattern-attribute" target="_blank" title="form input pattern attribute definition by w3">pattern</a> and title attributes.</p>
+			</header>
+
+			<fieldset>
+				<legend>Bank account details</legend>
+				<div class="form-group">
+					<!-- Select options are populated via javascript, but could be set statically -->
+					<label for="input-country">Country</label>
+						<select id="input-country" class="form-control" aria-describedby="input-country-help">
+						<option value="">(select country)</option>
+						<option value="AL">Albania</option>
+						<option value="AD">Andorra</option>
+						<option value="AT">Austria</option>
+						<option value="AZ">Azerbaijan</option>
+						<option value="BH">Bahrain</option>
+						<option value="BE">Belgium</option>
+						<option value="BA">Bosnia and Herzegovina</option>
+						<option value="BR">Brazil</option>
+						<option value="BG">Bulgaria</option>
+						<option value="CR">Costa Rica</option>
+						<option value="HR">Croatia</option>
+						<option value="CY">Cyprus</option>
+						<option value="CZ">Czech Republic</option>
+						<option value="DK">Denmark</option>
+						<option value="FO">Faroe Islands</option>
+						<option value="GL">Greenland</option>
+						<option value="DO">Dominican Republic</option>
+						<option value="EE">Estonia</option>
+						<option value="FI">Finland</option>
+						<option value="FR">France</option>
+						<option value="BL">Saint Barthelemy</option>
+						<option value="GF">French Guyana</option>
+						<option value="GP">Guadelope</option>
+						<option value="MF">Saint Martin (French Part)</option>
+						<option value="MQ">Martinique</option>
+						<option value="RE">Reunion</option>
+						<option value="PF">French Polynesia</option>
+						<option value="TF">French Southern Territories</option>
+						<option value="YT">Mayotte</option>
+						<option value="NC">New Caledonia</option>
+						<option value="PM">Saint Pierre et Miquelon</option>
+						<option value="WF">Wallis and Futuna Islands</option>
+						<option value="GE">Georgia</option>
+						<option value="DE">Germany</option>
+						<option value="GI">Gibraltar</option>
+						<option value="GR">Greece</option>
+						<option value="GT">Guatemala</option>
+						<option value="HU">Hungary</option>
+						<option value="IS">Iceland</option>
+						<option value="IE">Ireland</option>
+						<option value="IL">Israel</option>
+						<option value="IT">Italy</option>
+						<option value="KZ">Kazakhstan</option>
+						<option value="KW">Kuwait</option>
+						<option value="LV">Latvia</option>
+						<option value="LB">Lebanon</option>
+						<option value="LI">Liechtenstein</option>
+						<option value="LT">Lithuania</option>
+						<option value="LU">Luxembourg</option>
+						<option value="MK">Macedonia</option>
+						<option value="MT">Malta</option>
+						<option value="MR">Mauritania</option>
+						<option value="MU">Mauritius</option>
+						<option value="MD">Moldova</option>
+						<option value="MC">Monaco</option>
+						<option value="ME">Montenegro</option>
+						<option value="NL">The Netherlands</option>
+						<option value="NO">Norway</option>
+						<option value="PK">Pakistan</option>
+						<option value="PL">Poland</option>
+						<option value="PS">Palestinian Territory</option>
+						<option value="PT">Portugal</option>
+						<option value="RO">Romania</option>
+						<option value="SM">San Marino</option>
+						<option value="SA">Saudi Arabia</option>
+						<option value="RS">Serbia</option>
+						<option value="SK">Slovak Republic</option>
+						<option value="SI">Slovenia</option>
+						<option value="ES">Spain</option>
+						<option value="SE">Sweden</option>
+						<option value="CH">Switzerland</option>
+						<option value="TN">Tunisia</option>
+						<option value="TR">Turkey</option>
+						<option value="AE">United Arab Emirates</option>
+						<option value="GB">United Kingdom</option>
+						<option value="VG">British Virgin Islands</option>
+					</select>
+					<p id="input-country-help" class="form-help">
+						Select the country the bank account is registered in.
+					</p>
+				</div>
+
+				<div class="form-group">
+					<!-- IBAN definition: http://en.wikipedia.org/wiki/International_Bank_Account_Number -->
+					<!-- Example value: GB82WEST12345698765432 -->
+					<label for="input-iban">IBAN</label>
+					<input  id="input-iban" class="form-control"
+							type="text" required="required"
+							aria-describedby="input-iban-help" />
+					<p id="input-iban-help" class="form-help"></p>
+				</div>
+
+				<div class="form-group">
+					<!-- BIC definition: http://en.wikipedia.org/wiki/ISO_9362 -->
+					<!-- Example values: DEUTDEFF500, NEDSZAJJ, DABADKKK, UNCRIT2B912, DSBACNBXSHA -->
+					<label for="input-bic">BIC</label>
+					<input  id="input-bic" class="form-control"
+							type="text" required="required"
+							aria-describedby="input-bic-help" />
+					<p id="input-bic-help" class="form-help"></p>
+				</div>
+			</fieldset>
+
+			<input type="submit" value="check" class="clearfix" />
+
+			<footer>
+				<p class="footer-info">
+					This client-side International Bank Account Validator is a concept by <a href="https://twitter.com/jbmoelker" target="_blank">Jasper Moelker</a>. The IBAN patterns used for validation are adapted from the <a href="http://code.google.com/p/php-iban/source/browse/trunk/registry.txt" target="_blank">php-iban registry file</a>. Part of the form styles are borrowed from <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>.
+				</p>
+				<pre>
+
+
+
+	TODO style (in)valid states
+	TODO handle unknown country code with fallback patterns?
+	TODO move all title text partials into variables
+				</pre>
+			</footer>
+		</form>
+
+		<script src="index.js"></script>
+	</body>
+</html>

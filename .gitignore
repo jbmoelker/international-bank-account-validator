@@ -1,0 +1,13 @@
+# OS
+.DS_Store
+thumbs.db
+
+# Editor/IDE files
+*.iml
+*.ipr
+*.iws
+.idea
+*.sublime-workspace
+nb-configuration.xml
+nbactions.xml
+nbproject/private
