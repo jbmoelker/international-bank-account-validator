@@ -7,7 +7,8 @@
 		bicInput 		= document.getElementById('input-bic'),
 		bicHelp 		= document.getElementById('input-bic-help');
 
-	var HELPS			= {
+	var IS_VALIDATED_CLASS = 'is-validated',
+		HELPS			= {
 			IBAN_PREFIX		: 'The International Bank Account Number (IBAN) ',
 			IBAN_DEFAULT	: 'should start with 2 letters (a-z or A-Z), followed by 2 digits (0-9), 4 letters or digits (a-z, A-Z or 0-9), 7 digits (0-9) and 0 to 16 letters or digits (a-z, A-Z or 0-9), ',
 			BIC_PREFIX		: 'The Business Identifier Code (BIC) ',
@@ -224,5 +225,25 @@
 
 	countryInput.addEventListener("change", updatePattern, false);
 	updatePattern({ target: countryInput });
+
+	var validateField = function(event){
+		var target 	= event.target,
+			value	= target.value;
+
+		console.log(target,value);
+
+		if(value){
+			target.classList.add(IS_VALIDATED_CLASS);
+		}
+		else {
+			target.classList.remove(IS_VALIDATED_CLASS);
+		}
+	};
+
+	ibanInput.addEventListener("keyup", validateField, false);
+	validateField({ target: ibanInput });
+
+	bicInput.addEventListener("keyup", validateField, false);
+	validateField({ target: bicInput });
 
 }(this));
