@@ -1,20 +1,32 @@
 
 (function(root){
 
-	// TODO move all title text partials into variables
+	var countryInput 	= document.getElementById('input-country'),
+		ibanInput 		= document.getElementById('input-iban'),
+		ibanHelp 		= document.getElementById('input-iban-help'),
+		bicInput 		= document.getElementById('input-bic'),
+		bicHelp 		= document.getElementById('input-bic-help');
 
-	var countryInput = document.getElementById('input-country'),
-		ibanInput = document.getElementById('input-iban'),
-		ibanHelp = document.getElementById('input-iban-help'),
-		bicInput = document.getElementById('input-bic'),
-		bicHelp = document.getElementById('input-bic-help');
-
-	// patterns based on php-iban registry file:
-	// http://code.google.com/p/php-iban/source/browse/trunk/registry.txt
-	var BIC_PATTERN = '[A-Z]{4}[A-Z]{2}[A-Z0-9]{2}([A-Z0-9]{3})?',
-		COUNTRY_NAME_INDEX = 0,
-		IBAN_PATTERN_INDEX = 1,
-	 	REGISTRY = {
+	var HELPS			= {
+			IBAN_PREFIX		: 'The International Bank Account Number (IBAN) ',
+			IBAN_DEFAULT	: 'should start with 2 letters (a-z or A-Z), followed by 2 digits (0-9), 4 letters or digits (a-z, A-Z or 0-9), 7 digits (0-9) and 0 to 16 letters or digits (a-z, A-Z or 0-9), ',
+			BIC_PREFIX		: 'The Business Identifier Code (BIC) ',
+			BIC_INFIX		: 'should start with institution code or bank code of 4 letters (A-Z), followed by country code ',
+			BIC_POSTFIX		: 'the location code of 2 letters (A-Z) or digits (0-9), an optional branch code of 3 letters (A-Z), ',
+			BIC_DEFAULT		: 'should start with institution code or bank code of 4 letters (A-Z), followed by the country code of 2 letters (A-Z), the location code of 2 letters (A-Z) or digits (0-9), an optional branch code of 3 letters (A-Z), ',
+			FOR 			: 'for ',
+			START_WITH 		: 'should start with ',
+			FOLLOWED_BY		: 'followed by ',
+			DIGITS 			: ' digits (0-9)',
+			UPERCASE 		: ' uppercase letters (A-Z)',
+			ALPHANUMERIC 	: ' letters or digits (a-z, A-Z or 0-9)',
+			POSTFIX			: 'and should have no spaces or special characters.'
+		},
+		IBAN_PATTERN 		= '[a-zA-Z]{2}[0-9]{2}[a-zA-Z0-9]{4}[0-9]{7}([a-zA-Z0-9]?){0,16}', // generic pattern http://snipplr.com/view/15322/
+		BIC_PATTERN 		= '[A-Z]{4}[A-Z]{2}[A-Z0-9]{2}([A-Z0-9]{3})?',
+		COUNTRY_NAME_INDEX 	= 0,
+		IBAN_PATTERN_INDEX 	= 1,
+	 	REGISTRY 			= { // based on http://code.google.com/p/php-iban/source/browse/trunk/registry.txt
 		// "AA" : [ "IIBAN (Internet)", "AA(\\d{2})([A-Z0-9]{12})" ],
 		"AL" : [ "Albania", "AL(\\d{2})(\\d{8})([A-Za-z0-9]{16})" ],
 		"AD" : [ "Andorra", "AD(\\d{2})(\\d{4})(\\d{4})([A-Za-z0-9]{12})" ],
@@ -131,22 +143,22 @@
 			var part = parts.shift().slice(0,-2);
 			if(part.substr(0,2) === '\\d'){
 				//console.log('digits',part.slice(3));
-				rules.push(part.slice(3)+'x digit (0-9)');
+				rules.push(part.slice(3) + HELPS.DIGITS);
 			}
 			else if(part.substr(0,5) === '[A-Z]'){
 				//console.log('upercase',part.slice(6));
-				rules.push(part.slice(6)+'x uppercase letter (A-Z)');
+				rules.push(part.slice(6) + HELPS.UPPERCASE);
 			}
 			else if(part.substr(0,11) === '[A-Za-z0-9]'){
 				//console.log('alphanumeric',part.slice(12));
-				rules.push(part.slice(12)+'x letter or digit (a-z, A-Z or 0-9)');
+				rules.push(part.slice(12) + HELPS.ALPHANUMERIC);
 			}
-			else {
-				//console.log('unkown part',part);
-			}
+			//else {
+			//	console.log('unkown part',part);
+			//}
 		}
 
-		explanation = 'should start with \''+start+'\' followed by '+rules.join(', ')+' and should have no spaces or special characters.';
+		explanation = HELPS.START_WITH +'\''+ start +'\' '+ HELPS.FOLLOWED_BY +rules.join(', ') +' ';
 		//console.log('explanation:',explanation);
 
 		return explanation;
@@ -175,11 +187,24 @@
 			bicHelp.textContent = '';
 		} else {
 			// define new patterns & titles
-			countryName = REGISTRY[countryCode][COUNTRY_NAME_INDEX];
-			iban.pattern = REGISTRY[countryCode][IBAN_PATTERN_INDEX],
-			iban.help 	= 'The International Bank Account Number (IBAN) for '+countryName+' '+explainPattern(iban.pattern);
-			bic.pattern = BIC_PATTERN.substring(0,8)+countryCode+BIC_PATTERN.substring(16);
-			bic.help 	= 'The Business Identifier Code (BIC) for '+countryName+' should start with institution code or bank code of 4 letters (A-Z), followed by country code \''+countryCode+'\', the location code of 2 letters (A-Z) or digits (0-9), an optional branch code of 3 letters, and should have no spaces or special characters.';
+			iban.help 	= HELPS.IBAN_PREFIX;
+			bic.help 	= HELPS.BIC_PREFIX;
+			if( Object.keys(REGISTRY).indexOf(countryCode) >= 0){
+				// use name & pattern based on given country code
+				countryName  = REGISTRY[countryCode][COUNTRY_NAME_INDEX];
+				iban.pattern = REGISTRY[countryCode][IBAN_PATTERN_INDEX];
+				iban.help 	+= HELPS.FOR + countryName +' '+ explainPattern(iban.pattern);
+				bic.pattern  = BIC_PATTERN.substring(0,8)+countryCode+BIC_PATTERN.substring(16);
+				bic.help 	+= HELPS.FOR + countryName +' '+ HELPS.BIC_INFIX +'\''+ countryCode +'\', '+ HELPS.BIC_POSTFIX;
+			} else {
+				// unknown country, so use generic patterns
+				iban.pattern = IBAN_PATTERN;
+				iban.help 	+= HELPS.IBAN_DEFAULT;
+				bic.pattern  = BIC_PATTERN;
+				bic.help 	+= HELPS.BIC_PREFIX + HELPS.BIC_DEFAULT;
+			}
+			iban.help 	+= HELPS.POSTFIX;
+			bic.help 	+= HELPS.POSTFIX;
 			// update pattern & title attributes
 			ibanInput.removeAttribute('disabled');
 			ibanInput.pattern 	= iban.pattern;

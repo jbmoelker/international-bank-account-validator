@@ -16,12 +16,13 @@
 			</header>
 
 			<fieldset>
-				<legend>Bank account details</legend>
+				<legend><h2>Bank account details</h2></legend>
 				<div class="form-group">
 					<!-- Select options are populated via javascript, but could be set statically -->
 					<label for="input-country">Country</label>
 						<select id="input-country" class="form-control" aria-describedby="input-country-help">
 						<option value="">(select country)</option>
+						<option value="XX">Example Unknown Country</option>
 						<option value="AL">Albania</option>
 						<option value="AD">Andorra</option>
 						<option value="AT">Austria</option>
@@ -136,8 +137,7 @@
 
 
 	TODO style (in)valid states
-	TODO handle unknown country code with fallback patterns?
-	TODO move all title text partials into variables
+	TODO add example values
 				</pre>
 			</footer>
 		</form>
